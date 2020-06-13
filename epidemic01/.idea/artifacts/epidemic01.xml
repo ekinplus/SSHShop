@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="epidemic01">
+    <output-path>$PROJECT_DIR$/out/artifacts/epidemic01</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="epidemic01/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="epidemic01" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="ssm" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
