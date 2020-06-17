@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping package="com.ekin.entity">
+	<class name="Order" table="t_order">
+		<id name="oid">
+			<generator class="uuid"></generator>
+		</id>
+		<property name="total"></property>
+		<property name="oname"></property>
+		<property name="telephone"></property>
+		<property name="address"></property>
+		<property name="state"></property>
+		<set name="orderParts" >
+			<key column="oid"></key>
+			<one-to-many class="OrderPart"/>
+		</set>
+		<many-to-one name="user" column="uid" class="User"></many-to-one>
+	</class>
+</hibernate-mapping>

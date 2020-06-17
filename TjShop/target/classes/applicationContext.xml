@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+		<context:property-placeholder location="classpath:db.properties"/>
+	<bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	<bean name="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql" >true</prop>
+				<prop key="hibernate.hbm2ddl.auto" >update</prop>
+			</props>
+		</property>
+		<property name="mappingDirectoryLocations" value="classpath:hb"></property>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+			<tx:method name="delete*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+			<tx:method name="update*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+			<tx:method name="get*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* com.ekin.service.impl.*ServiceImpl.*(..))" id="txPc"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPc"/>
+	</aop:config>
+	<bean name="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	
+	<!-- action -->
+	<bean name="adminOrderAction" class="com.ekin.web.action.AdminOrderAction" scope="prototype" >
+		<property name="aos" ref="adminOrderService" ></property>
+	</bean>
+	<bean name="adminUserAction" class="com.ekin.web.action.AdminUserAction" scope="prototype" >
+		<property name="aus" ref="adminUserService" ></property>
+	</bean>
+	<bean name="adminProductAction" class="com.ekin.web.action.AdminProductAction" scope="prototype" >
+		<property name="aps" ref="adminProService" ></property>
+		<property name="cs" ref="cartService" ></property>
+	</bean>
+	<bean name="orderAction" class="com.ekin.web.action.OrderAction" scope="prototype" >
+		<property name="os" ref="orderService" ></property>
+		<property name="cs" ref="cartService" ></property>
+	</bean>
+	<bean name="cartAction" class="com.ekin.web.action.CartAction" scope="prototype" >
+		<property name="cs" ref="cartService" ></property>
+		<property name="ps" ref="productService" ></property>
+	</bean>
+	<bean name="userAction" class="com.ekin.web.action.UserAction" scope="prototype" >
+		<property name="us" ref="userService" ></property>
+	</bean>
+	<bean name="productAction" class="com.ekin.web.action.ProductAction" scope="prototype" >
+		<property name="ps" ref="productService" ></property>
+		<property name="pts" ref="productTypeService" ></property>
+	</bean>
+
+	<!-- service -->
+	<bean name="adminOrderService" class="com.ekin.service.impl.AdminOrderServiceImpl" >
+		<property name="aod" ref="adminOrderDao" ></property>
+	</bean>			
+	<bean name="adminUserService" class="com.ekin.service.impl.AdminUserServiceImpl" >
+		<property name="aud" ref="adminUserDao" ></property>
+	</bean>			
+	<bean name="adminProService" class="com.ekin.service.impl.AdminProServiceImpl" >
+		<property name="apd" ref="adminProDao" ></property>
+	</bean>			
+	<bean name="orderService" class="com.ekin.service.impl.OrderServiceImpl" >
+		<property name="od" ref="orderDao" ></property>
+	</bean>			
+	<bean name="cartService" class="com.ekin.service.impl.CartServiceImpl" >
+		<property name="cd" ref="cartDao" ></property>
+	</bean>						
+	<bean name="productService" class="com.ekin.service.impl.ProductServiceImpl" >
+		<property name="pd" ref="productDao" ></property>
+	</bean>								
+	<bean name="userService" class="com.ekin.service.impl.UserServiceImpl" >
+		<property name="ud" ref="userDao" ></property>
+	</bean>								
+	<bean name="productTypeService" class="com.ekin.service.impl.ProductTypeServiceImpl" >
+		<property name="ptd" ref="productTypeDao" ></property>
+	</bean>
+
+	<bean name="adminOrderDao" class="com.ekin.dao.impl.AdminOrderDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	<bean name="adminUserDao" class="com.ekin.dao.impl.AdminUserDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	<bean name="adminProDao" class="com.ekin.dao.impl.AdminProDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	<bean name="orderDao" class="com.ekin.dao.impl.OrderDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	<bean name="cartDao" class="com.ekin.dao.impl.CartDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	<bean name="productDao" class="com.ekin.dao.impl.ProductDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	
+	<bean name="productTypeDao" class="com.ekin.dao.impl.ProductTypeDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+	<bean name="userDao" class="com.ekin.dao.impl.UserDaoImpl" >
+		<property name="sessionFactory" ref="sessionFactory" ></property>
+	</bean>
+</beans>

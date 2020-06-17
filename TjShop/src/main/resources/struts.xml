@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<package name="shop" namespace="/" extends="struts-default">
+		<interceptors>
+				<interceptor name="AdminPrivilegeInterceptor" class="com.ekin.web.interceptor.AdminPrivilegeInterceptor"></interceptor>
+				<interceptor name="UserPrivilegeInterceptor" class="com.ekin.web.interceptor.UserPrivilegeInterceptor"></interceptor>
+		</interceptors>
+		
+		<global-results>
+			<result name="toAdminLogin" type="redirect" >/adminlogin.jsp</result>
+			<result name="toUserLogin" type="redirect" >/login.jsp</result>
+		</global-results>
+		
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.RuntimeException"></exception-mapping>
+		</global-exception-mappings>
+		<action name="AdminOrderAction_*" class="adminOrderAction" method="{1}">
+			<result name="list">/admin/order/list.jsp</result>
+			<result name="error">/mistake.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="AdminPrivilegeInterceptor"></interceptor-ref>
+		</action>
+		<action name="AdminUserAction_*" class="adminUserAction" method="{1}">
+			<result name="login" >/adminlogin.jsp</result>
+			<result name="toIndex" type="redirect">/admin/index.jsp</result>
+			<result name="error">/mistake.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		<action name="AdminProductAction_*" class="adminProductAction" method="{1}">
+			<result name="toProdListAction" type="redirect">
+				<param name="location">/AdminProductAction_prodList</param>
+			</result>
+			<result name="toProductList" type="redirect">/admin/product/list.jsp</result>
+			<result name="toProEdit" type="redirect">/admin/product/edit.jsp</result>
+			<result name="toTypeEdit" type="redirect">/admin/protype/edit.jsp</result>
+			<result name="toTypeList" type="redirect">/admin/protype/list.jsp</result>
+			<result name="toTypeListAction" type="redirect">
+				<param name="location">/AdminProductAction_TypeList</param>
+			</result>
+			
+			<result name="error">/mistake.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="AdminPrivilegeInterceptor"></interceptor-ref>
+		</action>
+		<action name="OrderAction_*" class="orderAction" method="{1}">
+			<result name="toBuyCart" type="redirect">/buycart.jsp</result>
+			<result name="toOrder" type="redirect">/order.jsp</result>
+			<result name="toPay" type="redirect">/pay.jsp</result>
+			<result name="toOrderList" type="redirect">/orderlist.jsp</result>
+			<result name="toPaySuccess" type="redirect">/paysuccess.jsp</result>
+			<result name="toOrderDetails" type="redirect">/orderdetails.jsp</result>
+			<result name="error">/mistake.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="UserPrivilegeInterceptor"></interceptor-ref>
+		</action>
+		<action name="CartAction_*" class="cartAction" method="{1}">
+			<result name="toIndex" type="redirect">/success.jsp</result>
+			<result name="error">/mistake.jsp</result>
+			<result name="toCart" type="redirect">/buycart.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="UserPrivilegeInterceptor"></interceptor-ref>
+		</action>
+		<action name="UserAction_*" class="userAction" method="{1}">
+			<result name="toCartAction" type="redirect">
+				<param name="location">/CartAction_creat</param>
+			</result>
+			<result name="toIndex" type="redirect">/success.jsp</result>
+			<result name="error">/mistake.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		<action name="ProductAction_*" class="productAction" method="{1}">
+			<result name="toTypeList" type="redirect">/index.jsp</result>
+			<result name="toProductList" type="redirect">/product.jsp</result>
+			<result name="error">/mistake.jsp</result>
+			<result name="toInfo" type="redirect">/productinfo.jsp</result>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		<action name="TestAction_*" class="testAction" method="{1}">
+			<result name="success">/index.jsp</result>
+		</action>
+	</package>
+</struts>

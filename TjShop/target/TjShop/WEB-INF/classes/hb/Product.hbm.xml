@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping package="com.ekin.entity">
+	<class name="Product" table="product">
+		<id name="pid">
+			<generator class="assigned"></generator>
+		</id>
+		<property name="pname"></property>
+		<property name="pimage"></property>
+		<property name="price"></property>
+		<property name="sprice"></property>
+		<property name="pdesc"></property>
+		<many-to-one name="protype" column="tid" class="Protype"></many-to-one>
+		<set name="CartPatrs">
+			<key column="pid"></key>
+			<one-to-many class="CartPart"/>
+		</set>	
+		<set name="OrderParts">
+			<key column="pid"></key>
+			<one-to-many class="OrderPart"/>
+		</set>	
+	</class>
+</hibernate-mapping>

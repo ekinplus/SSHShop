@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping package="com.ekin.entity">
+	<class name="Admin" table="admin">
+		<id name="aid">
+			<generator class="native"></generator>
+		</id>
+		<property name="username"></property>
+		<property name="password"></property>
+		<property name="name"></property>
+		
+	</class>
+</hibernate-mapping>

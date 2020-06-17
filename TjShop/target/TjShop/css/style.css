@@ -1,0 +1,32 @@
+#headerul
+{
+list-style-type:none;
+margin:0;
+padding:0;
+overflow:hidden;
+background-color:#337AB7;
+height:40px;
+}
+
+.headerli {float:left;}
+.headera:link,.headera:visited
+{
+display:block;
+width:120px;
+height:40px;
+font-weight:bold;
+color:#FFFFFF;
+text-align:center;
+padding:9px;
+text-decoration:none;
+text-transform:uppercase;
+font-size: 16px
+}
+.headera:hover
+{
+background-color:#cc0000;
+}
+.headera:active
+{
+background-color:#cc0000;
+}
